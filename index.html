@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>سياسة التسعير في قطاع العود و البخور | Pricing Calculator</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&family=Manrope:wght@500;700&display=swap');
+
+    :root {
+      --bg-1: #f7f3ec;
+      --bg-2: #fcfaf6;
+      --card: #ffffff;
+      --line: #e7dcc8;
+      --text: #2a2218;
+      --muted: #6c6256;
+      --accent: #8d5f36;
+      --accent-soft: #f4e7d4;
+      --good: #2f6a4f;
+      --shadow: 0 10px 30px rgba(57, 42, 24, 0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(141, 95, 54, 0.1), transparent 45%),
+        radial-gradient(circle at 90% 10%, rgba(47, 106, 79, 0.08), transparent 40%),
+        linear-gradient(180deg, var(--bg-1), var(--bg-2));
+      color: var(--text);
+      font-family: "Cairo", "Manrope", "Segoe UI", Tahoma, sans-serif;
+    }
+
+    .container {
+      width: min(1120px, 94vw);
+      margin: 24px auto 36px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 24px;
+    }
+
+    h1 {
+      margin: 0;
+      line-height: 1.3;
+      font-size: clamp(1.25rem, 2.7vw, 2rem);
+      letter-spacing: 0.2px;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .summary-grid {
+      margin-top: 18px;
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .summary-card {
+      background: #fffdfa;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: grid;
+      gap: 4px;
+      min-height: 92px;
+    }
+
+    .summary-title-ar {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .summary-title-en {
+      font-family: "Manrope", "Cairo", sans-serif;
+      font-size: 0.76rem;
+      color: var(--muted);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .summary-value {
+      font-family: "Manrope", "Cairo", sans-serif;
+      font-weight: 700;
+      font-size: clamp(1.06rem, 2vw, 1.35rem);
+      color: var(--accent);
+      direction: ltr;
+      text-align: left;
+      letter-spacing: 0.2px;
+    }
+
+    .total-costs {
+      margin-top: 12px;
+      background: linear-gradient(135deg, #fff8ef, #fefdf8);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .total-costs-label {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .total-costs-value {
+      font-family: "Manrope", "Cairo", sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--good);
+      direction: ltr;
+      text-align: left;
+    }
+
+    .table-card {
+      padding: 18px;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .toolbar-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .source-badge {
+      background: var(--accent-soft);
+      border: 1px solid #e9d8bf;
+      color: #5e4226;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.84rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .source-badge .en {
+      direction: ltr;
+      text-align: left;
+      font-family: "Manrope", "Cairo", sans-serif;
+      font-size: 0.75rem;
+      opacity: 0.9;
+    }
+
+    .action-btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-family: "Cairo", sans-serif;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, opacity 0.2s ease;
+      color: #fff;
+    }
+
+    .save-btn {
+      background: var(--good);
+    }
+
+    .reset-btn {
+      background: var(--accent);
+    }
+
+    .action-btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    .warning {
+      min-height: 20px;
+      color: #b54708;
+      font-size: 0.82rem;
+      margin-bottom: 4px;
+    }
+
+    .status-message {
+      min-height: 20px;
+      color: var(--good);
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    thead th {
+      background: #f8f4ed;
+      color: #5f5342;
+      font-weight: 700;
+      font-size: 0.88rem;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: right;
+    }
+
+    tbody tr {
+      transition: background 0.2s ease;
+    }
+
+    tbody tr:not(:last-child) {
+      border-bottom: 1px solid #efe7db;
+    }
+
+    tbody tr.active-source {
+      background: #fff7eb;
+      box-shadow: inset -4px 0 0 var(--accent);
+    }
+
+    tbody tr.key-price-row td {
+      background: linear-gradient(180deg, #f4f8ff, #edf5ff);
+      border-top: 1px solid #cfe0f5;
+      border-bottom: 1px solid #cfe0f5;
+    }
+
+    tbody tr.key-price-row td:first-child {
+      border-right: 1px solid #cfe0f5;
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+
+    tbody tr.key-price-row td:last-child {
+      border-left: 1px solid #cfe0f5;
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+
+    tbody tr.key-price-row.active-source td {
+      background: linear-gradient(180deg, #fff6e9, #fff0dd);
+    }
+
+    td {
+      padding: 10px 12px;
+      vertical-align: middle;
+    }
+
+    .label-ar {
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    .label-en {
+      margin-top: 2px;
+      font-size: 0.73rem;
+      color: var(--muted);
+      direction: ltr;
+      text-align: left;
+      font-family: "Manrope", "Cairo", sans-serif;
+    }
+
+    .input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      direction: ltr;
+    }
+
+    .suffix,
+    .prefix {
+      font-size: 0.77rem;
+      color: var(--muted);
+      font-family: "Manrope", "Cairo", sans-serif;
+      letter-spacing: 0.2px;
+      white-space: nowrap;
+    }
+
+    .cell-input {
+      width: 100%;
+      min-width: 130px;
+      border: 1px solid #d8cab4;
+      border-radius: 10px;
+      padding: 9px 10px;
+      font-size: 0.93rem;
+      background: #fff;
+      color: var(--text);
+      font-family: "Manrope", "Cairo", sans-serif;
+      direction: ltr;
+      text-align: left;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .cell-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(141, 95, 54, 0.14);
+    }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.75;
+    }
+
+    .goods-section {
+      margin-top: 14px;
+      border: 1px dashed #d8c8b2;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fffefb, #fdf8f1);
+      padding: 12px;
+    }
+
+    .goods-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .goods-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .goods-title {
+      margin: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #5f4d39;
+    }
+
+    .save-goods-btn {
+      background: #2d5e91;
+    }
+
+    .goods-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #eadfcf;
+      border-radius: 12px;
+      background: #fff;
+    }
+
+    .goods-table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+
+    .goods-table th,
+    .goods-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid #f2eadf;
+      vertical-align: top;
+    }
+
+    .goods-table th {
+      background: #faf5ed;
+      color: #6b5d4a;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .goods-table th:nth-child(1) { width: 16%; }
+    .goods-table th:nth-child(2) { width: 30%; }
+    .goods-table th:nth-child(3) { width: 16%; }
+    .goods-table th:nth-child(4) { width: 14%; }
+    .goods-table th:nth-child(5) { width: 12%; }
+    .goods-table th:nth-child(6) { width: 12%; }
+
+    .goods-table tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .goods-item-label {
+      font-weight: 700;
+      font-size: 0.86rem;
+      line-height: 1.5;
+    }
+
+    .goods-item-label .en {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      direction: ltr;
+      text-align: left;
+      font-family: "Manrope", "Cairo", sans-serif;
+    }
+
+    .spec-list {
+      display: grid;
+      gap: 7px;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .spec-control {
+      display: grid;
+      gap: 4px;
+    }
+
+    .spec-control span {
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .spec-control .cell-input,
+    .spec-control select.cell-input {
+      min-width: 0;
+      width: 100%;
+      padding: 7px 9px;
+      font-size: 0.82rem;
+    }
+
+    .goods-qty-cell,
+    .goods-price-cell {
+      min-width: 0;
+    }
+
+    .goods-table .input-wrap {
+      width: 100%;
+      justify-content: flex-start;
+      gap: 6px;
+    }
+
+    .goods-table .prefix {
+      min-width: 30px;
+    }
+
+    .goods-qty-input,
+    .goods-amount-input {
+      min-width: 0;
+      width: 100%;
+    }
+
+    .goods-percent {
+      direction: ltr;
+      text-align: left;
+      font-family: "Manrope", "Cairo", sans-serif;
+      color: #355f86;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .goods-line-total {
+      direction: ltr;
+      text-align: left;
+      font-family: "Manrope", "Cairo", sans-serif;
+      font-weight: 700;
+      color: #5e4226;
+      white-space: nowrap;
+    }
+
+    .goods-footer {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: #fff;
+      border: 1px solid #eadfcf;
+      border-radius: 10px;
+      padding: 9px 10px;
+    }
+
+    .goods-total {
+      font-size: 0.84rem;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .goods-total strong {
+      direction: ltr;
+      text-align: left;
+      font-family: "Manrope", "Cairo", sans-serif;
+      color: var(--good);
+    }
+
+    .goods-coverage {
+      font-size: 0.82rem;
+      color: var(--good);
+    }
+
+    @media (max-width: 960px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        width: min(1120px, 96vw);
+        margin-top: 14px;
+      }
+
+      .hero,
+      .table-card {
+        padding: 14px;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-card {
+        min-height: 84px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card hero">
+      <h1>سياسة التسعير في قطاع العود و البخور | Pricing Policy Calculator</h1>
+      <p class="subtitle">
+        أدخل قيمة واحدة في أي خانة مبلغ داخل الجدول، وسيتم احتساب جميع القيم فورًا حسب النسب المحددة.
+        <br />
+        Enter one amount in any row, and all fields update instantly based on your pricing policy.
+      </p>
+
+      <div class="summary-grid">
+        <article class="summary-card">
+          <div class="summary-title-ar">السعر قبل الضريبة</div>
+          <div class="summary-title-en">Price Excluding VAT</div>
+          <div class="summary-value" id="summary-base">SAR 0.00</div>
+        </article>
+        <article class="summary-card">
+          <div class="summary-title-ar">ضريبة القيمة المضافة</div>
+          <div class="summary-title-en">VAT Amount</div>
+          <div class="summary-value" id="summary-vat">SAR 0.00</div>
+        </article>
+        <article class="summary-card">
+          <div class="summary-title-ar">السعر النهائي شامل الضريبة</div>
+          <div class="summary-title-en">Final Price Including VAT</div>
+          <div class="summary-value" id="summary-final">SAR 0.00</div>
+        </article>
+        <article class="summary-card">
+          <div class="summary-title-ar">الربح</div>
+          <div class="summary-title-en">Profit</div>
+          <div class="summary-value" id="summary-profit">SAR 0.00</div>
+        </article>
+      </div>
+
+      <div class="total-costs">
+        <div class="total-costs-label">
+          إجمالي التكاليف (بدون الربح وبدون VAT) | Total Costs (Excl. Profit & VAT)
+        </div>
+        <div class="total-costs-value" id="summary-total-costs">SAR 0.00 (0.00%)</div>
+      </div>
+    </section>
+
+    <section class="card table-card">
+      <div class="toolbar">
+        <div class="source-badge">
+          <span>المصدر الحالي:</span>
+          <strong id="source-ar"></strong>
+          <span class="en" id="source-en"></span>
+        </div>
+        <div class="toolbar-actions">
+          <button type="button" class="action-btn save-btn" id="save-percentages-btn">حفظ النسب | Save Percentages</button>
+          <button type="button" class="action-btn reset-btn" id="reset-btn">إعادة التعيين | Reset</button>
+        </div>
+      </div>
+      <div class="warning" id="calc-warning"></div>
+      <div class="status-message" id="save-status"></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>البند | Variable</th>
+              <th>النسبة % | Percentage</th>
+              <th>المبلغ | Amount</th>
+            </tr>
+          </thead>
+          <tbody id="rows-body"></tbody>
+        </table>
+      </div>
+      <p class="note">
+        يمكن تعديل النسبة والمبلغ في أي صف. عند إدخال مبلغ في أي صف يتم اعتباره مصدر الحساب مباشرة.
+        <br />
+        تعديل نسب بنود التكلفة (بدون الربح) ينعكس تلقائيًا على نسبة الربح.
+        <br />
+        تفصيل تكلفة البضاعة في القسم التالي يتم ضبطه تلقائيًا ليبقى 100% من Cost of Goods.
+        <br />
+        Percentages and amounts are editable. Any change to cost percentages is automatically absorbed by Profit.
+      </p>
+
+      <div class="goods-section">
+        <div class="goods-header">
+          <h3 class="goods-title">تفصيل تكلفة البضاعة | Cost of Goods Breakdown</h3>
+          <div class="goods-actions">
+            <button type="button" class="action-btn save-goods-btn" id="save-goods-btn">حفظ السلع | Save Goods</button>
+          </div>
+        </div>
+        <div class="goods-table-wrap">
+          <table class="goods-table">
+            <thead>
+              <tr>
+                <th>الصنف | Item</th>
+                <th>المواصفات | Specifications</th>
+                <th>الكمية | Quantity</th>
+                <th>السعر (SAR) | Price</th>
+                <th>الإجمالي | Line Total</th>
+                <th>النسبة من COGS | % of COGS</th>
+              </tr>
+            </thead>
+            <tbody id="goods-rows-body"></tbody>
+          </table>
+        </div>
+        <div class="goods-footer">
+          <div class="goods-total">
+            <span>إجمالي السلع | Goods Total:</span>
+            <strong id="goods-total-amount">SAR 0.00</strong>
+            <span id="goods-total-percent">0.00%</span>
+          </div>
+          <div class="goods-coverage" id="goods-coverage-message"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const currencyFormatter = new Intl.NumberFormat("en-US", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+      const rows = [
+        { id: "cogs", ar: "تكلفة البضاعة", en: "Cost of Goods", pct: 34 },
+        { id: "salesMarketing", ar: "المبيعات والتسويق", en: "Sales & Marketing", pct: 39 },
+        { id: "management", ar: "الإدارة", en: "Management", pct: 5 },
+        { id: "loans", ar: "القروض", en: "Loans", pct: 1 },
+        { id: "zakat", ar: "الزكاة", en: "Zakat", pct: 1 },
+        { id: "profit", ar: "الربح", en: "Profit", pct: 20 },
+        { id: "vat", ar: "ضريبة القيمة المضافة", en: "VAT", pct: 15 },
+        { id: "basePrice", ar: "السعر قبل الضريبة", en: "Price Excluding VAT", pct: 100 },
+        { id: "finalPrice", ar: "السعر النهائي شامل الضريبة", en: "Final Price Including VAT", pct: 115 }
+      ];
+
+      const totalCostIds = ["cogs", "salesMarketing", "management", "loans", "zakat"];
+      const profitId = "profit";
+      const baseDistributionTarget = 100;
+      const savedPercentagesStorageKey = "oud-bukhoor-pricing-percentages-v1";
+      const savedGoodsStorageKey = "oud-bukhoor-goods-breakdown-v1";
+      const defaultPercentages = Object.fromEntries(rows.map((row) => [row.id, row.pct]));
+
+      const amountInputs = new Map();
+      const percentageInputs = new Map();
+      const rowElements = new Map();
+
+      const rowsBody = document.getElementById("rows-body");
+      const sourceAr = document.getElementById("source-ar");
+      const sourceEn = document.getElementById("source-en");
+      const warningEl = document.getElementById("calc-warning");
+      const statusEl = document.getElementById("save-status");
+      const savePercentagesBtn = document.getElementById("save-percentages-btn");
+      const resetBtn = document.getElementById("reset-btn");
+      const goodsRowsBody = document.getElementById("goods-rows-body");
+      const saveGoodsBtn = document.getElementById("save-goods-btn");
+      const goodsTotalAmountEl = document.getElementById("goods-total-amount");
+      const goodsTotalPercentEl = document.getElementById("goods-total-percent");
+      const goodsCoverageMessageEl = document.getElementById("goods-coverage-message");
+
+      let sourceId = "basePrice";
+      let sourceValue = 1000;
+      let latestAmounts = {};
+      let goodsItems = [];
+
+      const goodSpecInputs = new Map();
+      const goodQtyInputs = new Map();
+      const goodAmountInputs = new Map();
+      const goodPercentNodes = new Map();
+      const goodLineTotalNodes = new Map();
+
+      function normalizeDigits(value) {
+        const arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+        const easternArabicDigits = "۰۱۲۳۴۵۶۷۸۹";
+        return String(value)
+          .replace(/[٠-٩]/g, (digit) => arabicDigits.indexOf(digit))
+          .replace(/[۰-۹]/g, (digit) => easternArabicDigits.indexOf(digit))
+          .replace(/\u066B/g, ".")
+          .replace(/\u066C/g, "")
+          .replace(/,/g, "")
+          .replace(/[^\d.-]/g, "");
+      }
+
+      function parseNumber(value) {
+        const normalized = normalizeDigits(value).trim();
+        if (!normalized || normalized === "-" || normalized === "." || normalized === "-.") {
+          return Number.NaN;
+        }
+        const parsed = Number(normalized);
+        return Number.isFinite(parsed) ? parsed : Number.NaN;
+      }
+
+      function createDefaultCogsItems() {
+        return [
+          {
+            id: "oud",
+            labelAr: "عود",
+            labelEn: "Oud",
+            specs: [{ key: "name", label: "Name", type: "text" }],
+            values: { name: "", qty: 0, price: 0 },
+            qtyLabel: "كمية (Kg)"
+          },
+          {
+            id: "mabkhara",
+            labelAr: "مبخره",
+            labelEn: "Mabkhara",
+            specs: [
+              { key: "type", label: "Type", type: "select", options: ["حائلية خشبيه", "حجازيه معدنيه"] },
+              { key: "size", label: "Size", type: "select", options: ["L", "M", "S"] }
+            ],
+            values: { type: "حائلية خشبيه", size: "L", qty: 0, price: 0 },
+            qtyLabel: "كمية (حبة)"
+          },
+          {
+            id: "coal",
+            labelAr: "فحم",
+            labelEn: "Charcoal",
+            specs: [
+              { key: "type", label: "Type", type: "select", options: ["سريع الاشتعال", "الجوز الطبيعي الكرستال"] }
+            ],
+            values: { type: "سريع الاشتعال", qty: 0, price: 0 },
+            qtyLabel: "كمية (كرتون)"
+          },
+          {
+            id: "lighter",
+            labelAr: "ولاعه عالية البث",
+            labelEn: "High Flame Lighter",
+            specs: [],
+            values: { qty: 0, price: 0 },
+            qtyLabel: "كمية (حبة)"
+          },
+          {
+            id: "luxuryBox",
+            labelAr: "صندوق فاخر",
+            labelEn: "Luxury Box",
+            specs: [
+              { key: "type", label: "Type", type: "select", options: ["فورمايكا", "جلد", "خشب باب نجدي"] },
+              { key: "size", label: "Size", type: "select", options: ["1kg", "½ kg", "¼ kg", "⅛ kg"] }
+            ],
+            values: { type: "فورمايكا", size: "1kg", qty: 0, price: 0 },
+            qtyLabel: "كمية (حبة)"
+          },
+          {
+            id: "distributionBags",
+            labelAr: "اكياس ستان توزيعات",
+            labelEn: "Satin Distribution Bags",
+            specs: [],
+            values: { qty: 0, price: 0 },
+            qtyLabel: "كمية (حبة)"
+          },
+          {
+            id: "clip",
+            labelAr: "ملقط",
+            labelEn: "Clip",
+            specs: [],
+            values: { qty: 0, price: 0 },
+            qtyLabel: "كمية (حبة)"
+          },
+          {
+            id: "shippingCarton",
+            labelAr: "كرتون شحن",
+            labelEn: "Shipping Carton",
+            specs: [
+              { key: "size", label: "Size", type: "select", options: ["L", "M", "S"] }
+            ],
+            values: { size: "L", qty: 0, price: 0 },
+            qtyLabel: "كمية (حبة)"
+          },
+          {
+            id: "bubbleWrap",
+            labelAr: "Bubble wrap",
+            labelEn: "Bubble Wrap",
+            specs: [],
+            values: { qty: 0, price: 0 },
+            qtyLabel: "كمية (1Unit)"
+          }
+        ];
+      }
+
+      goodsItems = createDefaultCogsItems();
+
+      function formatNumber(value) {
+        const safe = Number.isFinite(value) ? value : 0;
+        return currencyFormatter.format(safe);
+      }
+
+      function getRowById(id) {
+        return rows.find((row) => row.id === id);
+      }
+
+      function getRate(id) {
+        const row = getRowById(id);
+        if (!row) return 0;
+        const pct = Number.isFinite(row.pct) ? row.pct : 0;
+        return Math.max(0, pct) / 100;
+      }
+
+      function setStatusMessage(message, isError = false) {
+        statusEl.textContent = message;
+        statusEl.style.color = isError ? "#b54708" : "#2f6a4f";
+      }
+
+      function rebalanceProfitPercentage(changedId) {
+        if (changedId && !totalCostIds.includes(changedId)) return;
+
+        const profitRow = getRowById(profitId);
+        if (!profitRow) return;
+
+        const totalCostsPct = totalCostIds.reduce((sum, id) => {
+          const item = getRowById(id);
+          return sum + (Number.isFinite(item?.pct) ? Math.max(0, item.pct) : 0);
+        }, 0);
+
+        profitRow.pct = Math.max(0, baseDistributionTarget - totalCostsPct);
+      }
+
+      function getGoodsTotalAmount() {
+        return goodsItems.reduce((sum, item) => sum + getItemLineTotal(item), 0);
+      }
+
+      function itemHasQty(item) {
+        return Object.prototype.hasOwnProperty.call(item.values, "qty");
+      }
+
+      function getItemQuantity(item) {
+        if (!itemHasQty(item)) return 1;
+        const qty = Number(item.values.qty);
+        return Number.isFinite(qty) ? Math.max(0, qty) : 0;
+      }
+
+      function getItemPrice(item) {
+        const price = Number(item.values.price);
+        return Number.isFinite(price) ? Math.max(0, price) : 0;
+      }
+
+      function getItemLineTotal(item) {
+        return getItemQuantity(item) * getItemPrice(item);
+      }
+
+      function syncGoodsToCogs(cogsAmount) {
+        const target = Number.isFinite(cogsAmount) ? Math.max(0, cogsAmount) : 0;
+        if (!goodsItems.length) {
+          goodsItems = createDefaultCogsItems();
+          renderGoodsRows();
+        }
+
+        const currentTotal = getGoodsTotalAmount();
+        if (currentTotal <= 0) {
+          const equalShare = goodsItems.length > 0 ? target / goodsItems.length : 0;
+          goodsItems.forEach((item) => {
+            if (itemHasQty(item) && getItemQuantity(item) <= 0) {
+              item.values.qty = 1;
+            }
+            const qty = getItemQuantity(item) || 1;
+            item.values.price = Math.max(0, equalShare / qty);
+          });
+          return;
+        }
+
+        const scaleFactor = target / currentTotal;
+        goodsItems.forEach((item) => {
+          item.values.price = Math.max(0, getItemPrice(item) * scaleFactor);
+        });
+
+        // Absorb floating-point residue in the last row to keep exact 100% coverage.
+        const adjustedTotal = getGoodsTotalAmount();
+        const delta = target - adjustedTotal;
+        const anchorItem = [...goodsItems].reverse().find((item) => getItemQuantity(item) > 0) || goodsItems[goodsItems.length - 1];
+        if (!anchorItem) return;
+        const anchorQty = getItemQuantity(anchorItem) || 1;
+        anchorItem.values.price = Math.max(0, getItemPrice(anchorItem) + (delta / anchorQty));
+      }
+
+      function updateGoodsSummary() {
+        const cogsAmount = Number.isFinite(latestAmounts.cogs) ? Math.max(0, latestAmounts.cogs) : 0;
+        const goodsTotal = getGoodsTotalAmount();
+        const coveragePercent = cogsAmount > 0 ? (goodsTotal / cogsAmount) * 100 : (goodsTotal === 0 ? 100 : 0);
+
+        goodsItems.forEach((item) => {
+          const qtyInput = goodQtyInputs.get(item.id);
+          const amountInput = goodAmountInputs.get(item.id);
+          const lineTotalNode = goodLineTotalNodes.get(item.id);
+          const pctNode = goodPercentNodes.get(item.id);
+          const isQtyFocused = document.activeElement === qtyInput;
+          const isAmountFocused = document.activeElement === amountInput;
+
+          if (qtyInput && !isQtyFocused) {
+            qtyInput.value = formatNumber(item.values.qty);
+          }
+
+          if (amountInput && !isAmountFocused) {
+            amountInput.value = formatNumber(item.values.price);
+          }
+
+          if (lineTotalNode) {
+            lineTotalNode.textContent = `SAR ${formatNumber(getItemLineTotal(item))}`;
+          }
+
+          if (pctNode) {
+            const pct = cogsAmount > 0 ? (getItemLineTotal(item) / cogsAmount) * 100 : 0;
+            pctNode.textContent = `${formatNumber(pct)}%`;
+          }
+        });
+
+        goodsTotalAmountEl.textContent = `SAR ${formatNumber(goodsTotal)}`;
+        goodsTotalPercentEl.textContent = `${formatNumber(coveragePercent)}%`;
+
+        const difference = cogsAmount - goodsTotal;
+        if (Math.abs(difference) <= 0.01) {
+          goodsCoverageMessageEl.textContent = "إجمالي السلع = 100% من تكلفة البضاعة | Goods total equals 100% of COGS.";
+          goodsCoverageMessageEl.style.color = "#2f6a4f";
+        } else if (difference > 0) {
+          goodsCoverageMessageEl.textContent = `المتبقي للوصول إلى 100%: SAR ${formatNumber(difference)} | Remaining to reach 100%.`;
+          goodsCoverageMessageEl.style.color = "#b54708";
+        } else {
+          goodsCoverageMessageEl.textContent = `تجاوزت تكلفة البضاعة بمقدار: SAR ${formatNumber(Math.abs(difference))} | Exceeds COGS by this amount.`;
+          goodsCoverageMessageEl.style.color = "#b54708";
+        }
+      }
+
+      function renderGoodsRows() {
+        goodsRowsBody.innerHTML = "";
+        goodSpecInputs.clear();
+        goodQtyInputs.clear();
+        goodAmountInputs.clear();
+        goodPercentNodes.clear();
+        goodLineTotalNodes.clear();
+
+        goodsItems.forEach((item, index) => {
+          const tr = document.createElement("tr");
+          tr.dataset.goodId = String(item.id);
+          tr.innerHTML = `
+            <td>
+              <div class="goods-item-label">
+                ${item.labelAr}
+                <span class="en">${item.labelEn}</span>
+              </div>
+            </td>
+            <td><div class="spec-list"></div></td>
+            <td class="goods-qty-cell"></td>
+            <td class="goods-price-cell">
+              <div class="input-wrap">
+                <span class="prefix">SAR</span>
+                <input class="cell-input goods-amount-input" type="text" inputmode="decimal" aria-label="Price for ${item.labelEn}" />
+              </div>
+            </td>
+            <td><div class="goods-line-total">SAR 0.00</div></td>
+            <td><div class="goods-percent">0.00%</div></td>
+          `;
+
+          goodsRowsBody.appendChild(tr);
+
+          const specList = tr.querySelector(".spec-list");
+          const qtyCell = tr.querySelector(".goods-qty-cell");
+          const amountInput = tr.querySelector(".goods-amount-input");
+          const lineTotalNode = tr.querySelector(".goods-line-total");
+          const percentNode = tr.querySelector(".goods-percent");
+
+          amountInput.addEventListener("focus", () => {
+            sourceId = "cogs";
+            setSourceBadge();
+            highlightSourceRow();
+          });
+
+          amountInput.addEventListener("input", (event) => {
+            const parsed = parseNumber(event.target.value);
+            item.values.price = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+            sourceId = "cogs";
+            sourceValue = getGoodsTotalAmount();
+            recalculate();
+          });
+
+          amountInput.addEventListener("blur", () => {
+            amountInput.value = formatNumber(item.values.price);
+          });
+
+          if (itemHasQty(item)) {
+            qtyCell.innerHTML = `
+              <div class="spec-control">
+                <span>${item.qtyLabel || "Quantity"}</span>
+                <input class="cell-input goods-qty-input" type="text" inputmode="decimal" aria-label="Quantity for ${item.labelEn}" />
+              </div>
+            `;
+            const qtyInput = qtyCell.querySelector(".goods-qty-input");
+            qtyInput.addEventListener("focus", () => {
+              sourceId = "cogs";
+              setSourceBadge();
+              highlightSourceRow();
+            });
+            qtyInput.addEventListener("input", (event) => {
+              const parsed = parseNumber(event.target.value);
+              item.values.qty = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+              sourceId = "cogs";
+              sourceValue = getGoodsTotalAmount();
+              recalculate();
+            });
+            qtyInput.addEventListener("blur", () => {
+              qtyInput.value = formatNumber(item.values.qty);
+            });
+            goodQtyInputs.set(item.id, qtyInput);
+          } else {
+            qtyCell.textContent = "-";
+          }
+
+          item.specs.forEach((spec) => {
+            const wrapper = document.createElement("label");
+            wrapper.className = "spec-control";
+
+            const label = document.createElement("span");
+            label.textContent = spec.label;
+            wrapper.appendChild(label);
+
+            let control;
+            if (spec.type === "select") {
+              control = document.createElement("select");
+              control.className = "cell-input";
+              spec.options.forEach((option) => {
+                const opt = document.createElement("option");
+                opt.value = option;
+                opt.textContent = option;
+                control.appendChild(opt);
+              });
+              control.value = String(item.values[spec.key] ?? spec.options[0] ?? "");
+              control.addEventListener("change", () => {
+                item.values[spec.key] = control.value;
+              });
+            } else {
+              control = document.createElement("input");
+              control.className = "cell-input";
+              control.type = "text";
+              control.value = String(item.values[spec.key] ?? "");
+              control.addEventListener("input", () => {
+                item.values[spec.key] = control.value;
+              });
+            }
+
+            wrapper.appendChild(control);
+            specList.appendChild(wrapper);
+            goodSpecInputs.set(`${item.id}:${spec.key}`, control);
+          });
+
+          goodAmountInputs.set(item.id, amountInput);
+          goodPercentNodes.set(item.id, percentNode);
+          goodLineTotalNodes.set(item.id, lineTotalNode);
+        });
+
+        updateGoodsSummary();
+      }
+
+      function resetGoodsRows() {
+        goodsItems = createDefaultCogsItems();
+        renderGoodsRows();
+      }
+
+      function getGoodsSnapshot() {
+        return goodsItems.map((item) => ({
+          id: item.id,
+          values: { ...item.values }
+        }));
+      }
+
+      function applyGoodsSnapshot(snapshot) {
+        if (!Array.isArray(snapshot) || !snapshot.length) return false;
+
+        const defaults = createDefaultCogsItems();
+        defaults.forEach((defaultItem) => {
+          const saved = snapshot.find((row) => row?.id === defaultItem.id);
+          if (!saved || typeof saved.values !== "object") return;
+
+          Object.keys(defaultItem.values).forEach((key) => {
+            const candidate = saved.values[key];
+            if (key === "qty" || key === "price") {
+              const parsed = Number(candidate);
+              if (Number.isFinite(parsed)) {
+                defaultItem.values[key] = Math.max(0, parsed);
+              }
+              return;
+            }
+
+            if (typeof candidate !== "string") return;
+            const cleaned = candidate.trim();
+            if (!cleaned) return;
+
+            const selectSpec = defaultItem.specs.find((spec) => spec.key === key && spec.type === "select");
+            if (selectSpec) {
+              if (selectSpec.options.includes(cleaned)) {
+                defaultItem.values[key] = cleaned;
+              }
+              return;
+            }
+
+            defaultItem.values[key] = cleaned;
+          });
+        });
+
+        goodsItems = defaults;
+        renderGoodsRows();
+        return true;
+      }
+
+      function loadSavedGoods() {
+        try {
+          const raw = localStorage.getItem(savedGoodsStorageKey);
+          if (!raw) return false;
+
+          const parsed = JSON.parse(raw);
+          const snapshot = Array.isArray(parsed?.goods) ? parsed.goods : parsed;
+          const loaded = applyGoodsSnapshot(snapshot);
+
+          if (loaded) {
+            setStatusMessage("تم تحميل السلع المحفوظة | Saved goods loaded.");
+            return true;
+          }
+          return false;
+        } catch (error) {
+          setStatusMessage("تعذر تحميل السلع المحفوظة | Could not load saved goods.", true);
+          return false;
+        }
+      }
+
+      function saveGoods() {
+        try {
+          const payload = {
+            version: 1,
+            savedAt: new Date().toISOString(),
+            goods: getGoodsSnapshot()
+          };
+          localStorage.setItem(savedGoodsStorageKey, JSON.stringify(payload));
+          setStatusMessage("تم حفظ السلع بنجاح | Goods saved successfully.");
+        } catch (error) {
+          setStatusMessage("تعذر حفظ السلع | Could not save goods.", true);
+        }
+      }
+
+      function getPercentagesSnapshot() {
+        const snapshot = {};
+        rows.forEach((row) => {
+          snapshot[row.id] = Number.isFinite(row.pct) ? Math.max(0, row.pct) : 0;
+        });
+        return snapshot;
+      }
+
+      function applyPercentagesSnapshot(snapshot) {
+        if (!snapshot || typeof snapshot !== "object") return false;
+        let hasAnyValue = false;
+        rows.forEach((row) => {
+          const parsed = Number(snapshot[row.id]);
+          if (Number.isFinite(parsed)) {
+            row.pct = Math.max(0, parsed);
+            hasAnyValue = true;
+          }
+        });
+        rebalanceProfitPercentage();
+        return hasAnyValue;
+      }
+
+      function loadSavedPercentages() {
+        try {
+          const raw = localStorage.getItem(savedPercentagesStorageKey);
+          if (!raw) return false;
+
+          const parsed = JSON.parse(raw);
+          const snapshot = parsed && typeof parsed === "object" && parsed.percentages
+            ? parsed.percentages
+            : parsed;
+
+          const loaded = applyPercentagesSnapshot(snapshot);
+          if (loaded) {
+            setStatusMessage("تم تحميل النسب المحفوظة | Saved percentages loaded.");
+            return true;
+          }
+          return false;
+        } catch (error) {
+          setStatusMessage("تعذر تحميل النسب المحفوظة | Could not load saved percentages.", true);
+          return false;
+        }
+      }
+
+      function savePercentages() {
+        try {
+          const payload = {
+            version: 1,
+            savedAt: new Date().toISOString(),
+            percentages: getPercentagesSnapshot()
+          };
+          localStorage.setItem(savedPercentagesStorageKey, JSON.stringify(payload));
+          setStatusMessage("تم حفظ النسب بنجاح | Percentages saved successfully.");
+        } catch (error) {
+          setStatusMessage("تعذر حفظ النسب | Could not save percentages.", true);
+        }
+      }
+
+      function setSourceBadge() {
+        const sourceRow = getRowById(sourceId);
+        sourceAr.textContent = sourceRow ? sourceRow.ar : "";
+        sourceEn.textContent = sourceRow ? sourceRow.en : "";
+      }
+
+      function highlightSourceRow() {
+        rows.forEach((row) => {
+          const tr = rowElements.get(row.id);
+          if (!tr) return;
+          tr.classList.toggle("active-source", row.id === sourceId);
+        });
+      }
+
+      function updateSummary(amounts) {
+        const base = amounts.basePrice || 0;
+        const vat = amounts.vat || 0;
+        const final = amounts.finalPrice || 0;
+        const profit = amounts.profit || 0;
+        const totalCosts = totalCostIds.reduce((sum, id) => sum + (amounts[id] || 0), 0);
+        const totalCostsPct = totalCostIds.reduce((sum, id) => sum + ((getRate(id) || 0) * 100), 0);
+
+        document.getElementById("summary-base").textContent = `SAR ${formatNumber(base)}`;
+        document.getElementById("summary-vat").textContent = `SAR ${formatNumber(vat)}`;
+        document.getElementById("summary-final").textContent = `SAR ${formatNumber(final)}`;
+        document.getElementById("summary-profit").textContent = `SAR ${formatNumber(profit)}`;
+        document.getElementById("summary-total-costs").textContent =
+          `SAR ${formatNumber(totalCosts)} (${formatNumber(totalCostsPct)}%)`;
+      }
+
+      function recalculate(options = {}) {
+        const sourceRate = getRate(sourceId);
+        const preserveFocusedSourceInput = Boolean(options.preserveFocusedSourceInput);
+        const sourceAmount = Number.isFinite(sourceValue) ? Math.max(0, sourceValue) : 0;
+
+        let baseValue = 0;
+        if (sourceRate > 0) {
+          baseValue = sourceAmount / sourceRate;
+          warningEl.textContent = "";
+        } else {
+          warningEl.textContent = "نسبة صف المصدر يجب أن تكون أكبر من صفر | Source row percentage must be greater than 0.";
+        }
+
+        const amounts = {};
+        rows.forEach((row) => {
+          amounts[row.id] = baseValue * getRate(row.id);
+        });
+        latestAmounts = amounts;
+        syncGoodsToCogs(amounts.cogs || 0);
+
+        rows.forEach((row) => {
+          const pctInput = percentageInputs.get(row.id);
+          const amountInput = amountInputs.get(row.id);
+          const pctFocused = document.activeElement === pctInput;
+          const amountFocused = document.activeElement === amountInput;
+
+          if (pctInput && !pctFocused) {
+            pctInput.value = formatNumber(row.pct);
+          }
+
+          if (!amountInput) return;
+
+          const shouldKeepRaw =
+            preserveFocusedSourceInput &&
+            amountFocused &&
+            row.id === sourceId;
+
+          if (!shouldKeepRaw) {
+            amountInput.value = formatNumber(amounts[row.id]);
+          }
+        });
+
+        setSourceBadge();
+        highlightSourceRow();
+        updateSummary(amounts);
+        updateGoodsSummary();
+      }
+
+      function buildTable() {
+        rowsBody.innerHTML = "";
+
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+          tr.dataset.id = row.id;
+          if (row.id === "basePrice" || row.id === "finalPrice") {
+            tr.classList.add("key-price-row");
+          }
+          tr.innerHTML = `
+            <td>
+              <div class="label-ar">${row.ar}</div>
+              <div class="label-en">${row.en}</div>
+            </td>
+            <td>
+              <div class="input-wrap">
+                <input class="cell-input" type="text" inputmode="decimal" data-role="pct" aria-label="${row.en} percentage" />
+                <span class="suffix">%</span>
+              </div>
+            </td>
+            <td>
+              <div class="input-wrap">
+                <span class="prefix">SAR</span>
+                <input class="cell-input" type="text" inputmode="decimal" data-role="amount" aria-label="${row.en} amount" />
+              </div>
+            </td>
+          `;
+
+          rowsBody.appendChild(tr);
+
+          const pctInput = tr.querySelector('[data-role="pct"]');
+          const amountInput = tr.querySelector('[data-role="amount"]');
+
+          rowElements.set(row.id, tr);
+          percentageInputs.set(row.id, pctInput);
+          amountInputs.set(row.id, amountInput);
+
+          pctInput.value = formatNumber(row.pct);
+          amountInput.value = "0.00";
+
+          pctInput.addEventListener("focus", () => {
+            highlightSourceRow();
+          });
+
+          pctInput.addEventListener("input", (event) => {
+            const parsed = parseNumber(event.target.value);
+            row.pct = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+            rebalanceProfitPercentage(row.id);
+            recalculate();
+          });
+
+          pctInput.addEventListener("blur", () => {
+            rebalanceProfitPercentage(row.id);
+            pctInput.value = formatNumber(row.pct);
+            recalculate();
+          });
+
+          amountInput.addEventListener("focus", () => {
+            sourceId = row.id;
+            setSourceBadge();
+            highlightSourceRow();
+          });
+
+          amountInput.addEventListener("input", (event) => {
+            sourceId = row.id;
+            const parsed = parseNumber(event.target.value);
+            sourceValue = Number.isFinite(parsed) ? Math.max(0, parsed) : 0;
+            recalculate({ preserveFocusedSourceInput: true });
+          });
+
+          amountInput.addEventListener("blur", () => {
+            amountInput.value = formatNumber(latestAmounts[row.id] || 0);
+          });
+        });
+      }
+
+      resetBtn.addEventListener("click", () => {
+        rows.forEach((row) => {
+          row.pct = defaultPercentages[row.id];
+        });
+        resetGoodsRows();
+        rebalanceProfitPercentage();
+        sourceId = "basePrice";
+        sourceValue = 1000;
+        recalculate();
+        setStatusMessage("تمت إعادة التعيين. اضغط حفظ إن رغبت بتثبيتها. | Reset complete. Click Save to keep it.");
+      });
+
+      saveGoodsBtn.addEventListener("click", () => {
+        saveGoods();
+      });
+
+      savePercentagesBtn.addEventListener("click", () => {
+        savePercentages();
+      });
+
+      buildTable();
+      renderGoodsRows();
+      loadSavedPercentages();
+      loadSavedGoods();
+      recalculate();
+    })();
+  </script>
+</body>
+</html>
